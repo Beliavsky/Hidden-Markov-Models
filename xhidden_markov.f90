@@ -3,12 +3,12 @@ program xhidden_markov
   use kind_mod, only: dp
   use random_mod, only: random_seed_init
   use basic_stats_mod, only: mean, sd, print_basic_stats
-  use hidden_markov_mod, only: simulate_hmm
+  use hidden_markov_mod, only: simulate_hmm, stationary
   implicit none
   integer, parameter :: n = 3, nobs = 10**6
   integer :: i, ios, states(nobs)
   real(kind=dp) :: obs(nobs)
-  real(kind=dp) :: freq(n), emp_trans(n,n)
+  real(kind=dp) :: freq(n), emp_trans(n,n), freq_theory(n)
   character(len=100) :: filename
   logical, parameter :: write_obs = .false.
   ! Initialize HMM parameters
@@ -38,14 +38,17 @@ program xhidden_markov
      close(10)
   end if
 
+  freq_theory = stationary(trans_mat)
   ! Compute and print state frequencies
   freq = 0.0_dp
   do i = 1, nobs
     freq(states(i)) = freq(states(i)) + 1.0_dp
   end do
+  freq = freq/nobs
   print "(/,a)", "State frequencies:"
+  print "(9x, *(a12))", "empirical", "theoretical", "diff"
   do i = 1, n
-    print "(A,I0,2X,F8.4)", "State ", i, freq(i)/nobs
+    print "(A,I0,2X,3F12.4)", "State ", i, freq(i), freq_theory(i), freq(i) - freq_theory(i)
   end do
 
   ! Compute and print empirical transition probabilities
