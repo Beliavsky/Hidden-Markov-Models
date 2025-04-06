@@ -1,2 +1,1 @@
-# Basic-Stats
-Basic descriptive statistics in Fortran
+### Hidden Markov Models
