@@ -5,6 +5,12 @@ Sample output:
 ```
 #obs: 1000000
 
+State parameters:
+                 mean          sd
+State 1        3.0000      1.0000
+State 2        0.0000      3.0000
+State 3       -2.0000     10.0000
+
 State frequencies:
             empirical theoretical        diff
 State 1        0.4627      0.4634     -0.0007
