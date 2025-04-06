@@ -8,7 +8,7 @@ public :: mean, variance, sd, mean_and_sd, kurtosis, basic_stats, &
    print_basic_stats, basic_stats_names, correl, acf, nbasic_stats, &
    stat, stats, corr_mat, rms, moving_sum, moving_average, &
    print_corr_mat, skew, cov, cov_mat, print_cov_mat, print_acf_mat, &
-   print_acf, bug
+   print_acf
 integer, parameter :: nbasic_stats = 6
 character (len=*), parameter :: basic_stats_names(nbasic_stats) = &
    [character(len=4) :: "mean", "sd", "skew", "kurt", "min", "max"]
@@ -317,7 +317,6 @@ character (len=100) :: fmt_acf_, fmt_labels_
 outu_ = default(output_unit, outu)
 fmt_labels_ = default("(6x,*(a8))", fmt_labels)
 if (present(fmt_header)) then
-   print*,"fmt_header = '" // trim(fmt_header) // "'" ! debug
    write (outu_, fmt_header)
 end if
 if (present(title)) write (outu_, "(a)") title
@@ -452,31 +451,4 @@ do i=k+1,n
 end do
 end function moving_average
 
-subroutine bug(x, nacf, labels, outu, fmt_header, &
-   fmt_trailer, title, fmt_acf, fmt_labels)
-! print the autocorrelations at lags 1 t hrough nacf of the columns of x(:,:)
-real(kind=dp), intent(in) :: x(:,:)       ! Input array
-integer, intent(in) :: nacf               ! Number of autocorrelations to compute
-character (len=*), intent(in), optional :: title, labels(:), &
-   fmt_header, fmt_trailer, fmt_acf, fmt_labels
-integer, intent(in), optional :: outu
-real(kind=dp) :: xacf(nacf,size(x,2))
-integer :: iacf, icol, outu_
-character (len=100) :: fmt_acf_, fmt_labels_
-outu_ = default(output_unit, outu)
-fmt_labels_ = default("(6x,*(a8))", fmt_labels)
-if (present(fmt_header)) then
-   print*,"fmt_header = '" // trim(fmt_header) // "'" ! debug
-   write (outu_, fmt_header)
-end if
-if (present(title)) write (outu_, "(a)") title
-if (present(labels)) write (outu_, fmt_labels_) &
-   (trim(labels(icol)), icol=1,size(labels))
-xacf = acf_mat(x, nacf)
-fmt_acf_ = default("('ACF_', i2.2, *(f8.4))", fmt_acf)
-do iacf=1,nacf
-   write (outu_, fmt_acf_) iacf, xacf(iacf,:)
-end do
-if (present(fmt_trailer)) write (outu_, fmt_trailer)
-end subroutine bug
 end module basic_stats_mod
