@@ -40,6 +40,11 @@ program xhidden_markov
      close(10)
   end if
 
+  print "(/,'State parameters:', /, 9x, *(a12))", "mean", "sd"
+  do i=1,n
+    print "(A,I0,2X,2F12.4)", "State ", i, means(i), sds(i)
+  end do
+
   freq_theory = stationary(trans_mat)
   ! Compute and print state frequencies
   freq = 0.0_dp
