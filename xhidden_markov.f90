@@ -17,6 +17,8 @@ program xhidden_markov
                                0.1_dp,0.5_dp,0.2_dp, &
                                0.2_dp,0.3_dp,0.5_dp], shape(trans_mat)), &
      means(n) = [3.0_dp, 0.0_dp, -2.0_dp], sds(n)   = [1.0_dp, 3.0_dp, 10.0_dp]
+  print "('#obs: ', i0)", nobs
+
   ! Initialize RNG
   call random_seed_init(1234, nburn=1000, print_seed=.false.)
 
@@ -63,20 +65,13 @@ program xhidden_markov
   end do
   print "(/,a)", "Theoretical transition probabilities:"
   do i = 1, n
-    write(*, "(A,2X,*(F8.4))") "From state "//trim(adjustl(itoa(i)))//":", trans_mat(i,:)
+    write(*, "(A,I0,A,2X,*(F8.4))") "From state ", i, ":", trans_mat(i,:)
   end do
   print "(/,a)", "Empirical transition probabilities:"
   do i = 1, n
-    write(*, "(A,2X,*(F8.4))") "From state "//trim(adjustl(itoa(i)))//":", emp_trans(i,:)
+    write(*, "(A,I0,A,2X,*(F8.4))") "From state ", i, ":", emp_trans(i,:)
   end do
-
+  print "(/, a, f8.4)", "max absolute deviation: ", maxval(abs(trans_mat-emp_trans))
   call print_basic_stats(obs, fmt_header="(/,'observation stats')")
-
-contains
-  function itoa(i) result(str)
-    integer, intent(in) :: i
-    character(len=3) :: str
-    write(str, "(I0)") i
-  end function itoa
 
 end program xhidden_markov
