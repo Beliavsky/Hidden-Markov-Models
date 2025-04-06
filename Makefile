@@ -1,7 +1,7 @@
-executables = xbasic_stats_gfort.exe
+executables = xhidden_markov_gfort.exe
 FC     = gfortran
 FFLAGS = -O0 -Wall -Werror=unused-parameter -Werror=unused-variable -Werror=unused-function -Wno-maybe-uninitialized -Wno-surprising -fbounds-check -static -g -fmodule-private
-obj    = kind.o constants.o util.o basic_stats.o random.o xbasic_stats.o
+obj    = kind.o constants.o util.o random.o basic_stats.o hidden_markov.o xhidden_markov.o
 
 all: $(executables)
 
@@ -9,11 +9,11 @@ all: $(executables)
 %.o: %.f90
 	$(FC) $(FFLAGS) -c $<
 
-xbasic_stats_gfort.exe: kind.o constants.o util.o basic_stats.o random.o xbasic_stats.o
-	$(FC) -o xbasic_stats_gfort.exe kind.o constants.o util.o basic_stats.o random.o xbasic_stats.o $(FFLAGS)
+xhidden_markov_gfort.exe: kind.o constants.o util.o random.o basic_stats.o hidden_markov.o xhidden_markov.o
+	$(FC) -o xhidden_markov_gfort.exe kind.o constants.o util.o random.o basic_stats.o hidden_markov.o xhidden_markov.o $(FFLAGS)
 
 run: $(executables)
-	./xbasic_stats_gfort.exe
+	./xhidden_markov_gfort.exe
 
 clean:
 	rm -f $(executables) $(obj)
